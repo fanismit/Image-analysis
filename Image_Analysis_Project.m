@@ -25,12 +25,23 @@ ITrain = augmentedImageDatastore(inputSize(1:2),imdsTrain);
 I = augmentedImageDatastore(inputSize(1:2),imdsTest);
 
 layer = 'pool5';
-VTrain = activations(net,augimdsTrain,layer,'OutputAs','rows');
-VTest = activations(net,augimdsTest,layer,'OutputAs','rows');
+VTrain = activations(net,ITrain,layer,'OutputAs','rows');
+VTest = activations(net,I,layer,'OutputAs','rows');
 
 whos featuresTrain
 YTrain = imdsTrain.Labels;
 YTest = imdsTest.Labels;
-
-
-%%%%
+d=Euclidian_distance(VTest(1,:),VTest(2,:));
+s= Similarity_Metric(d);
+function distance=Euclidian_distance(x,y)
+    x=x.';
+    y=y.';
+    distance = zeros(length(x) , length(y));
+    for i = 1:length(x)
+        for j = 1:length(y)
+            if i ~= j
+                distance(i,j) = sqrt((x(i)-x(j))^2 + (y(i)-y(j))^2);  
+            end
+        end
+    end 
+end
